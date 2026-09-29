@@ -289,7 +289,7 @@ function Home() {
               <em>complex</em> feel clear.
             </h1>
             <p className="hero-copy reveal reveal-delay-2">
-              I&apos;m Jia — a Computer Engineering graduate and web developer from
+              I&apos;m Jia, a Computer Engineering graduate and web developer from
               <strong> Mumbai, India.</strong> I care about the layer where
               thoughtful interfaces meet serious engineering.
             </p>
