@@ -806,3 +806,25 @@ code, pre, .window-file, .code-line, .terminal-strip {
     gap: 2rem;
   }
 }
+
+.engineering-stack {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.stack-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.stack-list span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.7rem;
+  background: var(--bg-tinted);
+  border-radius: 99px;
+  color: var(--text-muted);
+}
