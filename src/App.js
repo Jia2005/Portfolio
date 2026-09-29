@@ -1,14 +1,16 @@
 import React from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
+import App from "./Pages/Home";
+import "./App.css";
 
-const App = () => {
+const MainApp = () => {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<App />} />
       </Routes>
     </HashRouter>
   );
 };
 
-export default App;
+export default MainApp;
