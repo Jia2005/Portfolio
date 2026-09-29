@@ -335,7 +335,7 @@ function Home() {
           </div>
           <div className="about-layout">
             <p className="about-lede">
-              I like the hard parts — the fuzzy requirements, the weird edge cases, the moment a system finally clicks.
+              I like the hard parts from the fuzzy requirements to the weird edge cases and the moment a system finally clicks.
             </p>
             <div className="about-detail">
               <p>
