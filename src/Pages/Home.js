@@ -18,6 +18,7 @@ import CodementorImg from '../Images/Codementor.png';
 import SignoraImg from '../Images/Signora.png';
 import DashboardImg from '../Images/Dashboard.png';
 import ResearchImg from '../Images/Research.png';
+import JiaImg from '../Images/Jia.png';
 
 const projects = [
   {
@@ -237,7 +238,9 @@ function Home() {
       <header className="site-header">
         <div className="page-shell header-inner">
           <a className="wordmark" href="#top" onClick={(e) => scrollToSection(e, 'top')} data-testid="link-home">
-            <span className="wordmark-mark">J</span>
+            <span className="wordmark-mark">
+                <img src={JiaImg} alt="Jia Harisinghani" />
+            </span>
             <span>Jia Harisinghani</span>
           </a>
           <nav className="desktop-nav" aria-label="Main navigation">
