@@ -27,7 +27,7 @@ const projects = [
     name: 'CodeMentor',
     tagline: 'A gentler way to understand what your code is doing.',
     description:
-      'An IDE-like developer tool built around a code editor, code execution, an interactive terminal, and an AI assistant for Python.',
+      'An IDE-like Python learning environment with browser-based code execution, an interactive terminal, execution visualization, and an AI assistant.',
     tags: ['Python', 'Docker', 'AI assistant'],
     imageSrc: CodementorImg,
     linkText: 'Visit website',
@@ -281,16 +281,16 @@ function Home() {
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="page-shell hero-grid">
           <div>
-            <p className="eyebrow reveal">Computer engineer / web developer</p>
+            <p className="eyebrow reveal">Computer engineer / software developer</p>
             <h1 className="hero-title reveal reveal-delay-1" id="hero-title">
               I build things<br />
               that make the<br />
               <em>complex</em> feel clear.
             </h1>
             <p className="hero-copy reveal reveal-delay-2">
-              I&apos;m Jia, a Computer Engineering graduate and web developer from
-              <strong> Mumbai, India.</strong> I care about the layer where
-              thoughtful interfaces meet serious engineering.
+              I&apos;m Jia, a Computer Engineering graduate and software developer from
+              <strong> Mumbai, India.</strong> I enjoy building systems, developer tools, 
+              and interfaces that make complex things easier to use.
             </p>
             <div className="hero-actions reveal reveal-delay-3">
               <a className="button-primary" href="#work" onClick={(e) => scrollToSection(e, 'work')} data-testid="link-hero-work">
@@ -335,7 +335,7 @@ function Home() {
           </div>
           <div className="about-layout">
             <p className="about-lede">
-              I like the hard parts from the fuzzy requirements to the weird edge cases and the moment a system finally clicks.
+              I like the hard parts - from the fuzzy requirements to the weird edge cases and the moment a system finally clicks.
             </p>
             <div className="about-detail">
               <p>
@@ -359,9 +359,23 @@ function Home() {
                 </div>
                 <div className="fact">
                   <span className="fact-label">I reach for</span>
-                  <span className="fact-value">React, systems, visual explanations</span>
+                  <span className="fact-value">Developer tools, Real-time systems, and Interactive products</span>
                 </div>
               </div>
+              <div className="engineering-stack">
+            <span className="fact-label">I work with</span>
+                <div className="stack-list">
+                    <span>Java</span>
+                    <span>JavaScript</span>
+                    <span>TypeScript</span>
+                    <span>React</span>
+                    <span>Next.js</span>
+                    <span>Node.js</span>
+                    <span>PostgreSQL</span>
+                    <span>Redis</span>
+                    <span>Docker</span>
+                </div>
+            </div>
             </div>
           </div>
         </div>
