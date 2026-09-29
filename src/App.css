@@ -507,9 +507,10 @@ code, pre, .window-file, .code-line, .terminal-strip {
 .research-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
+  gap: 3rem;
+  align-items: center; 
 }
+
 
 .research-title {
   font-size: 1.75rem;
