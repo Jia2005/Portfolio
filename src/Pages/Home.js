@@ -183,7 +183,6 @@ function ProjectCaseStudy({ project, onClose }) {
           </div>
         </div>
         <div className="case-study-footer">
-          <span>Detailed links and live demos will be added when available.</span>
           <button className="button-quiet" type="button" onClick={onClose}>Back to work <ArrowUpRight size={14} /></button>
         </div>
       </article>
