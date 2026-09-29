@@ -508,7 +508,8 @@ code, pre, .window-file, .code-line, .terminal-strip {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  align-items: center; 
+  align-items: stretch; /* Stretch items to match full grid height */
+  width: 100%;
 }
 
 
