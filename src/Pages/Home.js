@@ -25,7 +25,7 @@ const EMAIL = 'jia2.harisinghani@gmail.com';
 const GITHUB_URL = 'https://github.com/Jia2005';
 const LINKEDIN_URL = 'https://linkedin.com/in/jia-harisinghani';
 const DOI_URL = 'https://doi.org/10.1049/icp.2025.4694';
-const RESUME_URL = `${process.env.PUBLIC_URL}/Jia_Harisinghani_Resume.pdf`;
+const RESUME_URL = `https://drive.google.com/file/d/1xYkANHX_shGsL-w3X8mTsQRkZ2_6kwRu/view?usp=sharing`;
 
 const navItems = [
   { id: 'about', label: 'About' },
@@ -495,7 +495,7 @@ function Home() {
           <div className="hero-text">
             <p className="hero-role">Computer engineer and software developer</p>
             <h1 className="hero-title" id="hero-title">
-              I build things that make the complex feel clear.
+              I build things that make the complex feel clear and simple.
             </h1>
             <p className="hero-copy">
               I&apos;m Jia, a computer engineer from Mumbai. I build developer tools, visual
