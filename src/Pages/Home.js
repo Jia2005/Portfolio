@@ -25,7 +25,7 @@ const EMAIL = 'jia2.harisinghani@gmail.com';
 const GITHUB_URL = 'https://github.com/Jia2005';
 const LINKEDIN_URL = 'https://linkedin.com/in/jia-harisinghani';
 const DOI_URL = 'https://doi.org/10.1049/icp.2025.4694';
-const RESUME_URL = `https://drive.google.com/file/d/1xYkANHX_shGsL-w3X8mTsQRkZ2_6kwRu/view?usp=sharing`;
+const RESUME_URL = `https://drive.google.com/file/d/1NMEvk1LYc53f-KPyrpeAJq56LocMaWR4/view?usp=drive_link`;
 
 const navItems = [
   { id: 'about', label: 'About' },
