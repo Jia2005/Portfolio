@@ -498,7 +498,7 @@ function Home() {
               I build things that make the complex feel clear and simple.
             </h1>
             <p className="hero-copy">
-              I&apos;m Jia, a computer engineer from Mumbai. I build developer tools, visual
+              I&apos;m Jia, a computer engineer and software developer from Mumbai. I build developer tools, visual
               learning products, and real-time systems, and I care most about the moment
               something finally clicks.
             </p>
@@ -535,8 +535,9 @@ function Home() {
                 that turn live data into useful decisions.
               </p>
               <p>
-                I earned my B.E. in Computer Engineering at Thadomal Shahani Engineering College
-                in Mumbai. The projects below are where I&apos;ve been learning in public.
+                I earned my B.E. in Computer Engineering from University of Mumbai 
+                (Thadomal Shahani Engineering College) in Mumbai. 
+                The projects below are where I&apos;ve been learning in public.
               </p>
               <dl className="facts">
                 <div className="fact">
@@ -544,7 +545,7 @@ function Home() {
                   <dd>B.E. Computer Engineering</dd>
                 </div>
                 <div className="fact">
-                  <dt>School</dt>
+                  <dt>College</dt>
                   <dd>Thadomal Shahani Engineering College</dd>
                 </div>
                 <div className="fact">
