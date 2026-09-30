@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowDown,
   ArrowUpRight,
   Check,
-  Code2,
-  Command,
+  Copy,
+  FileText,
   Github,
   Linkedin,
   Mail,
   Menu,
+  RotateCcw,
   Terminal,
   X,
 } from 'lucide-react';
@@ -20,170 +21,337 @@ import DashboardImg from '../Images/Dashboard.png';
 import ResearchImg from '../Images/Research.png';
 import JiaImg from '../Images/Jia.png';
 
+const EMAIL = 'jia2.harisinghani@gmail.com';
+const GITHUB_URL = 'https://github.com/Jia2005';
+const LINKEDIN_URL = 'https://linkedin.com/in/jia-harisinghani';
+const DOI_URL = 'https://doi.org/10.1049/icp.2025.4694';
+const RESUME_URL = `${process.env.PUBLIC_URL}/Jia_Harisinghani_Resume.pdf`;
+
+const navItems = [
+  { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'work', label: 'Work' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'research', label: 'Research' },
+  { id: 'contact', label: 'Contact' },
+];
+
+const skillGroups = [
+  { label: 'Languages', items: ['JavaScript', 'TypeScript', 'Java'] },
+  { label: 'Frontend', items: ['React', 'Next.js', 'HTML5', 'CSS3', 'Tailwind CSS'] },
+  { label: 'Backend and databases', items: ['Node.js', 'Express', 'MongoDB', 'MySQL', 'InfluxDB'] },
+  { label: 'Machine learning and GIS', items: ['CNNs', 'K-means', 'Random Forest', 'GDAL', 'QGIS'] },
+  { label: 'Tools', items: ['Docker', 'Git', 'Vercel', 'Netlify'] },
+];
+
 const projects = [
   {
-    number: '01',
-    type: 'developer tool / in progress',
+    id: 'codementor',
+    kind: 'Developer tool, in progress',
     name: 'CodeMentor',
     tagline: 'A gentler way to understand what your code is doing.',
     description:
-      'An IDE-like Python learning environment with browser-based code execution, an interactive terminal, execution visualization, and an AI assistant.',
-    tags: ['Python', 'Docker', 'AI assistant'],
+      'An IDE-like Python learning environment with browser-based code execution, an interactive terminal, step-by-step execution, and an AI assistant.',
+    tags: ['React', 'Node.js', 'Docker', 'AI assistant'],
     imageSrc: CodementorImg,
     linkText: 'Visit website',
     linkUrl: 'https://codementor-fm3u.onrender.com/',
-    role: 'Developer tool design and full-stack implementation',
     overview:
-      'CodeMentor is an IDE-like coding environment designed to make programming more interactive and understandable.',
+      'CodeMentor is a browser-based Python environment that shows what your code is doing as it runs, not only what it prints.',
+    problem:
+      'Beginners can run a program and still have no idea why it behaves the way it does. Most editors show the output and nothing about what happened in between.',
+    solution:
+      'You write Python in an IDE-like editor and run it in the browser. You can follow execution line by line with explanations and animations of the program state, type input into an interactive terminal, and ask an AI assistant when something does not make sense.',
+    role: 'I designed and built it end to end: the editor interface, the execution backend, and the Docker-based runtime.',
     architecture:
-      'The environment connects a code editor to backend execution, an interactive terminal, and a Docker-based runtime.',
-    details:
-      'Organized around line-by-line execution, explanations, and animations that make program states clear.',
+      'A React front end sends code to a Node.js backend, which runs it in a Docker-based execution environment and returns the results to the editor and terminal. The step-by-step view and the AI assistant sit on top of that execution flow.',
     challenges:
-      'Making execution feel understandable without hiding the underlying engineering.',
+      'Showing every step of a program without burying the learner in detail. The hardest part was making execution understandable while staying honest about what the interpreter actually does.',
     learned:
-      'Developer tools can be approachable without becoming less serious.',
+      'Learning tools can be approachable without watering down the engineering underneath them.',
   },
   {
-    number: '02',
-    type: 'education / visualization',
+    id: 'algorific',
+    kind: 'Education and visualization',
     name: 'Algorific',
     tagline: 'Data structures, made visible.',
     description:
-      'A data structures education and visualization project using motion and clear visual states to make logic easy to follow.',
-    tags: ['Data structures', 'Visualization', 'Learning'],
+      'An interactive data structures platform that uses motion and clear visual states so you can watch the logic happen instead of decoding it.',
+    tags: ['JavaScript', 'React', 'Visualization'],
     imageSrc: AlgorificImg,
     linkText: 'Visit website',
     linkUrl: 'https://algorific.vercel.app/ds',
-    role: 'Frontend and interaction development',
     overview:
-      'Algorific is a visual way to understand data structures without staring at a wall of code.',
+      'Algorific teaches data structures visually, so you can watch a structure change instead of reading a wall of code.',
+    problem:
+      'Data structures are usually taught with static diagrams and dense code, which hides how a structure changes from one operation to the next.',
+    solution:
+      'Each topic pairs a short explanation with an animated visualization of its operations and interactive elements, including small games, so learners can check that the idea has landed.',
+    role: 'I built the front end and the interactions.',
     architecture:
-      'Brings together theory, visual explanations, and interactive learning elements.',
-    details:
-      'Each step gives the learner a way to connect the concept to what is happening on screen.',
+      'A JavaScript and React front end where every data structure follows the same pattern: explanation first, then an animated visualization, then practice. It is deployed on Vercel.',
     challenges:
-      'Keeping the scope focused while making the algorithm genuinely useful.',
-    learned:
-      'A focused explanation can be more valuable than a long list of shallow features.',
+      'Keeping the scope tight. It was tempting to keep adding structures and features, but a smaller set explained well is worth more than a long list explained shallowly.',
+    learned: 'A focused explanation beats a long feature list.',
   },
   {
-    number: '03',
-    type: 'computer vision / research',
+    id: 'sign-to-text',
+    kind: 'Computer vision and research',
     name: 'Sign-to-text',
     tagline: 'Listening with the eyes.',
     description:
-      'A real-time sign-to-text project combining computer vision with research to explore accessible communication.',
+      'A real-time sign-to-text project that combines computer vision with research to explore more accessible communication.',
     tags: ['Computer vision', 'Real time', 'Accessibility'],
     imageSrc: SignoraImg,
     linkText: 'Visit GitHub repo',
     linkUrl: 'https://github.com/ria30102004/Sign-Language-Translate',
-    role: 'Machine learning, research, and full-stack development',
     overview:
-      'A major project exploring real-time sign-to-text translation for communities.',
+      'Sign-to-text is a real-time project that turns signing into written text using computer vision.',
+    problem:
+      'Conversations between signers and non-signers usually depend on an interpreter or a shared written channel. I wanted to see how far a real-time model could close that gap.',
+    solution:
+      'The system recognizes signs from live video and shows the predicted text as it happens, wrapped in a web application so anyone can try it.',
+    role: 'I worked on the model, the research behind it, and the full-stack application around it.',
     architecture:
-      'Combines a real-time model, visual communication, and full-stack experience.',
-    details:
-      'Developed with research into the model and the broader learning experience around accessibility.',
+      'A computer vision model recognizes signs from a live video feed, and a web application displays the predicted text back to the user in real time.',
     challenges:
-      'Designing for real communication needs with reliable system performance.',
+      'Real-time performance. A translation that lags or misfires is not useful in a conversation, so responsiveness and reliability mattered as much as accuracy.',
     learned:
-      'Technical decisions carry weight when interfaces impact how people communicate.',
+      'When software affects how people communicate, reliability is a design requirement, not a nice-to-have.',
   },
 ];
 
-function ProjectVisual({ project }) {
+const codeLines = [
+  { indent: 0, tokens: [['kw', 'def '], ['fn', 'make_it_clear'], ['', '(concept):']] },
+  { indent: 1, tokens: [['', 'steps = '], ['fn', 'explain'], ['', '(concept)']] },
+  { indent: 1, tokens: [['kw', 'for '], ['', 'step '], ['kw', 'in '], ['', 'steps:']] },
+  { indent: 2, tokens: [['fn', 'show'], ['', '(step)']] },
+  { indent: 1, tokens: [['kw', 'return '], ['str', '"aha"']] },
+];
+
+const stateRows = [
+  { from: 1, name: 'concept', value: '"loops"' },
+  { from: 2, name: 'steps', value: '3 items' },
+  { from: 4, name: 'step', value: '3' },
+];
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function BrowserFrame({ src, alt, title, bar = true }) {
   return (
-    <div className="project-visual-card" aria-label={`${project.name} preview`}>
-      <div className="visual-window-bar">
-        <span className="dot red" />
-        <span className="dot yellow" />
-        <span className="dot green" />
-        <span className="visual-window-title">{project.name}</span>
-      </div>
-      <div className="visual-content-box">
-        {project.imageSrc ? (
-          <img src={project.imageSrc} alt={project.name} className="project-screenshot" />
-        ) : (
-          <div className="image-placeholder-box">
-            <span>Add image placeholder</span>
-            <span className="placeholder-subtext">({project.name})</span>
-          </div>
-        )}
+    <div className={bar ? 'frame' : 'frame frame-plain'}>
+      {bar && (
+        <div className="frame-bar">
+          <span />
+          <span />
+          <span />
+          {title && <span className="frame-title">{title}</span>}
+        </div>
+      )}
+      <div className="frame-screen">
+        <img src={src} alt={alt} loading="lazy" />
       </div>
     </div>
   );
 }
 
-function ProjectCaseStudy({ project, onClose }) {
+function HeroCode() {
+  const reduce = prefersReducedMotion();
+  const [line, setLine] = useState(reduce ? 6 : 0);
+  const [run, setRun] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return undefined;
+    setLine(0);
+    const timers = [];
+    for (let i = 1; i <= 6; i += 1) {
+      timers.push(window.setTimeout(() => setLine(i), 1000 + i * 750));
+    }
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [run, reduce]);
+
+  const done = line === 6;
+
   return (
-    <div className="case-study-backdrop" role="presentation" onClick={onClose}>
+    <div className="hero-art">
+      <div
+        className="code-window"
+        aria-hidden="true"
+      >
+        <div className="code-bar">
+          <span />
+          <span />
+          <span />
+          <span className="code-file">lesson.py</span>
+        </div>
+        <div className="code-body">
+          <div className="code-lines">
+            {codeLines.map((codeLine, index) => (
+              <div
+                className={line === index + 1 ? 'code-line is-active' : 'code-line'}
+                key={index}
+              >
+                <span className="line-number">{index + 1}</span>
+                <span style={{ paddingLeft: `${codeLine.indent * 1.25}rem` }}>
+                  {codeLine.tokens.map(([type, text], tokenIndex) => (
+                    <span className={type ? `tok-${type}` : undefined} key={tokenIndex}>
+                      {text}
+                    </span>
+                  ))}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="code-state">
+            <span className="state-heading">State</span>
+            {stateRows.map((row) => (
+              <div className={line >= row.from ? 'state-row is-on' : 'state-row'} key={row.name}>
+                <span>{row.name}</span>
+                <span>{row.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={done ? 'code-output is-done' : 'code-output'}>
+          {done ? (
+            <>
+              <Check size={13} /> Returned "aha"
+            </>
+          ) : (
+            <>{line === 0 ? 'Ready' : 'Running'}</>
+          )}
+        </div>
+      </div>
+      <button className="replay" type="button" onClick={() => setRun((current) => current + 1)}>
+        <RotateCcw size={13} /> Replay
+      </button>
+    </div>
+  );
+}
+
+function ProjectRow({ project, onOpen }) {
+  return (
+    <article className="project">
+      <button
+        className="project-media"
+        type="button"
+        onClick={() => onOpen(project)}
+        aria-label={`Open the ${project.name} case study`}
+      >
+        <BrowserFrame src={project.imageSrc} alt={`${project.name} screenshot`} title={project.name} />
+        <span className="project-media-cue">Read case study</span>
+      </button>
+      <div className="project-body">
+        <p className="project-kind">{project.kind}</p>
+        <h3 className="project-name">{project.name}</h3>
+        <p className="project-tagline">{project.tagline}</p>
+        <p className="project-desc">{project.description}</p>
+        <ul className="chips" aria-label={`${project.name} technologies`}>
+          {project.tags.map((tag) => (
+            <li key={tag}>{tag}</li>
+          ))}
+        </ul>
+        <div className="project-links">
+          <a className="link-arrow" href={project.linkUrl} target="_blank" rel="noreferrer">
+            {project.linkText} <ArrowUpRight size={15} />
+          </a>
+          <button className="link-quiet" type="button" onClick={() => onOpen(project)}>
+            Read case study
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function CaseStudy({ project, onClose }) {
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const previous = document.activeElement;
+    if (dialogRef.current) dialogRef.current.focus();
+    return () => {
+      if (previous && typeof previous.focus === 'function') previous.focus();
+    };
+  }, []);
+
+  const trapFocus = (event) => {
+    if (event.key !== 'Tab' || !dialogRef.current) return;
+    const nodes = dialogRef.current.querySelectorAll('a[href], button:not([disabled])');
+    if (!nodes.length) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+    const active = document.activeElement;
+    if (event.shiftKey && (active === first || active === dialogRef.current)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  const sections = [
+    ['Overview', project.overview],
+    ['The problem', project.problem],
+    ['What it does', project.solution],
+    ['My role', project.role],
+    ['How it works', project.architecture],
+    ['Challenges', project.challenges],
+    ['What I learned', project.learned],
+  ];
+
+  return (
+    <div className="case-backdrop" role="presentation" onClick={onClose}>
       <article
         className="case-study"
         role="dialog"
         aria-modal="true"
         aria-labelledby="case-study-title"
+        tabIndex={-1}
+        ref={dialogRef}
+        onKeyDown={trapFocus}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="case-study-header">
-          <p className="project-type">{project.type}</p>
-          <button
-            className="case-study-close"
-            type="button"
-            onClick={onClose}
-            aria-label="Close case study"
-          >
+        <div className="case-header">
+          <p className="project-kind">{project.kind}</p>
+          <button className="icon-button" type="button" onClick={onClose} aria-label="Close case study">
             <X size={18} />
           </button>
         </div>
-        <div className="case-study-hero">
+        <div className="case-hero">
           <div>
-            <p className="section-index">case study / {project.number}</p>
-            <h2 className="case-study-title" id="case-study-title">
-              {project.name === 'CodeMentor' ? <>Code<em>Mentor</em></> : project.name === 'Algorific' ? <>Algo<em>rific</em></> : <>Sign-<em>to-text</em></>}
-            </h2>
-            <p className="case-study-tagline">{project.tagline}</p>
+            <h2 className="case-title" id="case-study-title">{project.name}</h2>
+            <p className="case-tagline">{project.tagline}</p>
           </div>
-          <ProjectVisual project={project} />
+          <BrowserFrame src={project.imageSrc} alt={`${project.name} screenshot`} title={project.name} />
         </div>
-        <div className="case-study-grid">
-          <div>
-            <p className="case-label">01 / overview</p>
-            <p>{project.overview}</p>
-          </div>
-          <div>
-            <p className="case-label">02 / what it does</p>
-            <p>{project.description}</p>
-          </div>
-          <div>
-            <p className="case-label">03 / Jia&apos;s role</p>
-            <p>{project.role}</p>
-          </div>
-          <div>
-            <p className="case-label">04 / technical architecture</p>
-            <p>{project.architecture}</p>
-          </div>
-          <div>
-            <p className="case-label">05 / implementation details</p>
-            <p>{project.details}</p>
-          </div>
-          <div>
-            <p className="case-label">06 / challenges</p>
-            <p>{project.challenges}</p>
-          </div>
-          <div>
-            <p className="case-label">07 / what I learned</p>
-            <p>{project.learned}</p>
-          </div>
-          <div>
-            <p className="case-label">08 / tech stack</p>
-            <ul className="tech-list">
-              {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+        <div className="case-grid">
+          {sections.map(([label, text]) => (
+            <div className="case-block" key={label}>
+              <h3 className="case-label">{label}</h3>
+              <p>{text}</p>
+            </div>
+          ))}
+          <div className="case-block">
+            <h3 className="case-label">Built with</h3>
+            <ul className="chips">
+              {project.tags.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
             </ul>
           </div>
         </div>
-        <div className="case-study-footer">
-          <button className="button-quiet" type="button" onClick={onClose}>Back to work <ArrowUpRight size={14} /></button>
+        <div className="case-footer">
+          <a className="link-arrow" href={project.linkUrl} target="_blank" rel="noreferrer">
+            {project.linkText} <ArrowUpRight size={15} />
+          </a>
+          <button className="link-quiet" type="button" onClick={onClose}>
+            Back to work
+          </button>
         </div>
       </article>
     </div>
@@ -195,6 +363,11 @@ function Home() {
   const [eggOpen, setEggOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [activeId, setActiveId] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+
+  const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+  const shortcut = isMac ? '⌘ J' : 'Ctrl J';
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -203,28 +376,56 @@ function Home() {
         setEggOpen((current) => !current);
       }
       if (event.key === 'Escape') {
-        setMenuOpen(false);
+        setSelectedProject(null);
         setEggOpen(false);
+        setMenuOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const closeMenu = () => setMenuOpen(false);
+  useEffect(() => {
+    document.body.style.overflow = selectedProject ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedProject]);
 
-  const scrollToSection = (e, id) => {
-    e.preventDefault();
-    closeMenu();
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 8);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveId(entry.target.id === 'top' ? '' : entry.target.id);
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px' }
+    );
+    ['top', ...navItems.map((item) => item.id)].forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (event, id) => {
+    event.preventDefault();
+    setMenuOpen(false);
     const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (element) element.scrollIntoView({ behavior: 'smooth' });
   };
 
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText('jia2.harisinghani@gmail.com');
+      await navigator.clipboard.writeText(EMAIL);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
@@ -232,28 +433,41 @@ function Home() {
     }
   };
 
+  const navLink = (item, className) => (
+    <a
+      key={item.id}
+      className={activeId === item.id ? `${className} is-active` : className}
+      href={`#${item.id}`}
+      aria-current={activeId === item.id ? 'true' : undefined}
+      onClick={(event) => scrollToSection(event, item.id)}
+    >
+      {item.label}
+    </a>
+  );
+
   return (
     <main className="portfolio">
-      <header className="site-header">
+      <a className="skip-link" href="#about" onClick={(event) => scrollToSection(event, 'about')}>
+        Skip to content
+      </a>
+
+      <header className={scrolled ? 'site-header is-scrolled' : 'site-header'}>
         <div className="page-shell header-inner">
-          <a className="wordmark" href="#top" onClick={(e) => scrollToSection(e, 'top')} data-testid="link-home">
+          <a className="wordmark" href="#top" onClick={(event) => scrollToSection(event, 'top')}>
             <span className="wordmark-mark">
-                <img src={JiaImg} alt="Jia Harisinghani" />
+              <img src={JiaImg} alt="" />
             </span>
             <span>Jia Harisinghani</span>
           </a>
           <nav className="desktop-nav" aria-label="Main navigation">
-            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} data-testid="link-nav-about">About</a>
-            <a href="#work" onClick={(e) => scrollToSection(e, 'work')} data-testid="link-nav-work">Work</a>
-            <a href="#experience" onClick={(e) => scrollToSection(e, 'experience')} data-testid="link-nav-experience">Experience</a>
-            <a href="#research" onClick={(e) => scrollToSection(e, 'research')} data-testid="link-nav-research">Research</a>
-            <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} data-testid="link-nav-contact">Contact</a>
+            {navItems.map((item) => navLink(item, 'nav-link'))}
           </nav>
           <div className="header-actions">
-            <a className="header-social" href="https://github.com/Jia2005" target="_blank" rel="noreferrer">GitHub</a>
-            <a className="header-social" href="https://linkedin.com/in/jia-harisinghani" target="_blank" rel="noreferrer">LinkedIn</a>
-            <a className="header-contact" href="#contact" onClick={(e) => scrollToSection(e, 'contact')} data-testid="link-header-email">
-              Let&apos;s talk <ArrowUpRight size={14} strokeWidth={1.6} />
+            <a className="header-link" href={RESUME_URL} target="_blank" rel="noreferrer">
+              <FileText size={15} /> Resume
+            </a>
+            <a className="pill" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>
+              Let&apos;s talk <ArrowUpRight size={14} />
             </a>
           </div>
           <button
@@ -262,17 +476,15 @@ function Home() {
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((current) => !current)}
-            data-testid="button-mobile-menu"
           >
-            {menuOpen ? <X size={17} /> : <Menu size={17} />}
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
           {menuOpen && (
             <nav className="mobile-nav" aria-label="Mobile navigation">
-              <a href="#about" onClick={(e) => scrollToSection(e, 'about')} data-testid="link-mobile-about">About</a>
-              <a href="#work" onClick={(e) => scrollToSection(e, 'work')} data-testid="link-mobile-work">Work</a>
-              <a href="#experience" onClick={(e) => scrollToSection(e, 'experience')} data-testid="link-mobile-experience">Experience</a>
-              <a href="#research" onClick={(e) => scrollToSection(e, 'research')} data-testid="link-mobile-research">Research</a>
-              <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} data-testid="link-mobile-contact">Contact</a>
+              {navItems.map((item) => navLink(item, 'mobile-link'))}
+              <a className="mobile-link" href={RESUME_URL} target="_blank" rel="noreferrer">
+                Resume
+              </a>
             </nav>
           )}
         </div>
@@ -280,247 +492,220 @@ function Home() {
 
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="page-shell hero-grid">
-          <div>
-            <p className="eyebrow reveal">Computer engineer / software developer</p>
-            <h1 className="hero-title reveal reveal-delay-1" id="hero-title">
-              I build things<br />
-              that make the<br />
-              <em>complex</em> feel clear.
+          <div className="hero-text">
+            <p className="hero-role">Computer engineer and software developer</p>
+            <h1 className="hero-title" id="hero-title">
+              I build things that make the complex feel clear.
             </h1>
-            <p className="hero-copy reveal reveal-delay-2">
-              I&apos;m Jia, a Computer Engineering graduate and software developer from
-              <strong> Mumbai, India.</strong> I enjoy building systems, developer tools, 
-              and interfaces that make complex things easier to use.
+            <p className="hero-copy">
+              I&apos;m Jia, a computer engineer from Mumbai. I build developer tools, visual
+              learning products, and real-time systems, and I care most about the moment
+              something finally clicks.
             </p>
-            <div className="hero-actions reveal reveal-delay-3">
-              <a className="button-primary" href="#work" onClick={(e) => scrollToSection(e, 'work')} data-testid="link-hero-work">
-                See the work <ArrowDown size={15} strokeWidth={1.7} />
+            <div className="hero-actions">
+              <a className="button button-primary" href="#work" onClick={(event) => scrollToSection(event, 'work')}>
+                See my work <ArrowDown className="icon-down" size={16} />
               </a>
-              <a className="button-quiet" href="#contact" onClick={(e) => scrollToSection(e, 'contact')} data-testid="link-hero-email">
-                <Mail size={15} strokeWidth={1.7} /> Say hello
+              <a className="button button-secondary" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>
+                <Mail size={16} /> Say hello
               </a>
             </div>
-            <div className="hero-meta reveal reveal-delay-3">
-              <span><i className="status-dot" /> Open to meaningful work</span>
-              <i className="hero-meta-divider" />
-              <span>Based in Mumbai</span>
-            </div>
+            <p className="hero-status">
+              <i className="status-dot" /> Open to new opportunities. Based in Mumbai.
+            </p>
           </div>
-          <div className="hero-art reveal reveal-delay-2" aria-label="Abstract CodeMentor interface diagram">
-            <div className="orbit" />
-            <div className="code-window">
-              <div className="window-bar"><i /><i /><i /><span className="window-file">lesson.py</span></div>
-              <div className="code-body">
-                <div className="code-line"><span className="line-number">01</span><span><span className="syntax-keyword">def</span> <span className="syntax-function">make_it_clear</span>(concept):</span></div>
-                <div className="code-line"><span className="line-number">02</span><span>&nbsp;&nbsp;steps = <span className="syntax-function">explain</span>(concept)</span></div>
-                <div className="code-line"><span className="line-number">03</span><span>&nbsp;&nbsp;<span className="syntax-keyword">for</span> step <span className="syntax-keyword">in</span> steps:</span></div>
-                <div className="code-line"><span className="line-number">04</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span className="syntax-function">show</span>(step)</span></div>
-                <div className="code-line"><span className="line-number">05</span><span>&nbsp;&nbsp;<span className="syntax-keyword">return</span> <span className="syntax-string">&quot;aha&quot;</span></span></div>
-                <div className="code-line"><span className="line-number">06</span><span className="syntax-comment"># one line at a time</span></div>
-              </div>
-              <div className="terminal-strip"><span>›</span> execution complete <Check size={12} /></div>
-            </div>
-          </div>
+          <HeroCode />
         </div>
       </section>
 
       <section className="section" id="about" aria-labelledby="about-title">
         <div className="page-shell">
-          <div className="section-heading">
-            <p className="section-index">01 / a little context</p>
-            <h2 className="section-title" id="about-title">
-              The person behind<br />
-              the <em>interface.</em>
-            </h2>
+          <div className="section-head">
+            <h2 className="section-title" id="about-title">The person behind the interface</h2>
           </div>
           <div className="about-layout">
             <p className="about-lede">
-              I like the hard parts - from the fuzzy requirements to the weird edge cases and the moment a system finally clicks.
+              I like the hard parts: the fuzzy requirements, the weird edge cases, and the
+              moment a system finally clicks.
             </p>
             <div className="about-detail">
               <p>
-                My work sits between building and explaining. I&apos;ve worked on developer tools, algorithm visualizations, computer vision, and systems that turn live data into useful decisions.
+                My work sits between building and explaining. I&apos;ve made developer tools,
+                algorithm visualizations, and computer vision projects, and I&apos;ve built systems
+                that turn live data into useful decisions.
               </p>
               <p>
-                I earned my B.E. in Computer Engineering at Thadomal Shahani Engineering College, Mumbai. The projects below are where I&apos;ve been learning in public.
+                I earned my B.E. in Computer Engineering at Thadomal Shahani Engineering College
+                in Mumbai. The projects below are where I&apos;ve been learning in public.
               </p>
-              <div className="facts">
+              <dl className="facts">
                 <div className="fact">
-                  <span className="fact-label">Degree</span>
-                  <span className="fact-value">B.E. Computer Engineering</span>
-                </div>
-                <div className="fact">
-                  <span className="fact-label">School</span>
-                  <span className="fact-value">Thadomal Shahani Engineering College</span>
+                  <dt>Degree</dt>
+                  <dd>B.E. Computer Engineering</dd>
                 </div>
                 <div className="fact">
-                  <span className="fact-label">Home base</span>
-                  <span className="fact-value">Mumbai, India</span>
+                  <dt>School</dt>
+                  <dd>Thadomal Shahani Engineering College</dd>
                 </div>
                 <div className="fact">
-                  <span className="fact-label">I reach for</span>
-                  <span className="fact-value">Developer tools, Real-time systems, and Interactive products</span>
+                  <dt>Home base</dt>
+                  <dd>Mumbai, India</dd>
                 </div>
-              </div>
-              <div className="engineering-stack">
-            <span className="fact-label">I work with</span>
-                <div className="stack-list">
-                    <span>Java</span>
-                    <span>JavaScript</span>
-                    <span>TypeScript</span>
-                    <span>React</span>
-                    <span>Next.js</span>
-                    <span>Node.js</span>
-                    <span>PostgreSQL</span>
-                    <span>Redis</span>
-                    <span>Docker</span>
+                <div className="fact">
+                  <dt>I reach for</dt>
+                  <dd>Developer tools, real-time systems, and interactive products</dd>
                 </div>
-            </div>
+                <div className="fact">
+                  <dt>Exploring</dt>
+                  <dd>AI-assisted developer tools, system design, and agentic AI research</dd>
+                </div>
+              </dl>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section bg-gray-50" id="work" aria-labelledby="work-title">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-12">
-            <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">02 / selected work</p>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900" id="work-title">
-              Built with curiosity,<br />
-              shipped with <em>care.</em>
-            </h2>
+      <section className="section section-alt" id="skills" aria-labelledby="skills-title">
+        <div className="page-shell">
+          <div className="section-head">
+            <h2 className="section-title" id="skills-title">What I work with</h2>
+            <p className="section-sub">The tools I reach for across the stack, from interfaces to models.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <dl className="skills">
+            {skillGroups.map((group) => (
+              <div className="skill-row" key={group.label}>
+                <dt>{group.label}</dt>
+                <dd>
+                  <ul className="chips chips-lg">
+                    {group.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="section" id="work" aria-labelledby="work-title">
+        <div className="page-shell">
+          <div className="section-head">
+            <h2 className="section-title" id="work-title">Built with curiosity, shipped with care</h2>
+            <p className="section-sub">Three projects, each one about making something hard easier to see.</p>
+          </div>
+          <div className="projects">
             {projects.map((project) => (
-              <article 
-                className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow" 
-                key={project.name} 
-                data-testid={`card-project-${project.name.toLowerCase().replace('-', '')}`}
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <span className="font-mono text-sm text-gray-400">{project.number}</span>
-                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium">{project.type}</p>
-                </div>
-                <ProjectVisual project={project} />
-                <h3 className="text-2xl font-bold text-gray-900 mt-2 mb-2">
-                  {project.name === 'CodeMentor' ? <>Code<em>Mentor</em></> : project.name === 'Algorific' ? <>Algo<em>rific</em></> : <>Sign-<em>to-text</em></>}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">{project.tagline}</p>
-                <p className="text-sm text-gray-500 mb-6 flex-grow">{project.description}</p>
-                <ul className="flex flex-wrap gap-2 list-none p-0 mb-6" aria-label={`${project.name} topics`}>
-                  {project.tags.map((tag) => (
-                    <li key={tag} className="text-xs px-3 py-1 bg-gray-100 rounded-full font-mono text-gray-600">{tag}</li>
-                  ))}
-                </ul>
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                  <a
-                    href={project.linkUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-gray-900 hover:underline bg-transparent border-none p-0"
-                  >
-                    {project.linkText} <ArrowUpRight size={14} />
-                  </a>
-                  <button
-                    className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 bg-transparent border-none p-0 cursor-pointer"
-                    type="button"
-                    onClick={() => setSelectedProject(project)}
-                  >
-                    Case study
-                  </button>
-                </div>
-              </article>
+              <ProjectRow key={project.id} project={project} onOpen={setSelectedProject} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section" id="experience" aria-labelledby="experience-title" style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
-        <div className="page-shell" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%' }}>
-          <div className="section-heading">
-            <p className="section-index">03 / where it meets the real world</p>
-            <h2 className="section-title" id="experience-title">
-              Systems are only useful<br />
-              when they change <em>something.</em>
-            </h2>
-          </div>
-          <div className="research-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center', margin: 'auto 0', width: '100%' }}>
-            <div>
-              <p className="eyebrow">AB Engineers / June–July 2025</p>
-              <h3 className="research-title">Monitoring that looks <em>forward.</em></h3>
-              <p className="research-copy">
-                At AB Engineers, I worked on real-time monitoring and predictive maintenance using React, Tailwind, Node, InfluxDB, and Random Forest. The project reported approximately 35% operational efficiency improvement and approximately 90% model accuracy.
-              </p>
-              <p className="research-note">Real-time signals → useful prediction → less guesswork</p>
-            </div>
-            
-            <div className="project-visual-card" aria-label="Dashboard preview">
-              <div className="visual-window-bar">
-                <span className="dot red" />
-                <span className="dot yellow" />
-                <span className="dot green" />
-              </div>
-              <div className="visual-content-box" style={{ height: '220px' }}>
-                <img src={DashboardImg} alt="Dashboard Preview" className="project-screenshot" style={{ borderRadius: '8px' }} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-lavender" id="research" aria-labelledby="research-title" style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
-        <div className="page-shell" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%' }}>
-          <div className="section-heading">
-            <p className="section-index">04 / research</p>
-            <h2 className="section-title" id="research-title">
-              Looking closely at<br />
-              a changing <em>city.</em>
-            </h2>
-          </div>
-          <div className="research-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center', margin: 'auto 0', width: '100%' }}>
-            <div>
-              <p className="about-lede">
-                Research taught me to sit with ambiguity before trying to solve it.
-              </p>
-              <div className="about-detail" style={{ marginTop: '1.5rem' }}>
-                <p>
-                  I worked on research into automated slum classification using deep convolutional neural networks and k-means clustering in the Mumbai metropolitan region.
-                </p>
-                <p>
-                  The work was presented at an international engineering and technology conference and published via IET Conference Proceedings.
-                </p>
-                <p className="research-note">Publication details available through IET Digital Library</p>
-              </div>
-            </div>
-
-            <div className="project-visual-card" aria-label="Research preview">
-              <div className="visual-window-bar">
-                <span className="dot red" />
-                <span className="dot yellow" />
-                <span className="dot green" />
-              </div>
-              <div className="visual-content-box" style={{ height: '220px' }}>
-                {ResearchImg ? (
-                  <img src={ResearchImg} alt="Research Preview" className="project-screenshot" style={{ borderRadius: '8px' }} />
-                ) : (
-                  <div className="image-placeholder-box">
-                    <span>Research Preview</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="contact-section" id="contact" aria-labelledby="contact-title">
+      <section className="section section-alt" id="experience" aria-labelledby="experience-title">
         <div className="page-shell">
-          <div className="contact-content">
-            <p className="contact-kicker">05 / your turn</p>
-            <h2 className="contact-title" id="contact-title">Have a problem<br />worth <em>untangling?</em></h2>
-            <p className="contact-copy">If you&apos;re building something thoughtful, I&apos;d love to hear what you&apos;re working on.</p>
-            <a className="contact-email" href="mailto:jia2.harisinghani@gmail.com" data-testid="link-contact-email">
-              jia2.harisinghani@gmail.com <ArrowUpRight size={18} strokeWidth={1.5} />
+          <div className="section-head">
+            <h2 className="section-title" id="experience-title">
+              Systems are only useful when they change something
+            </h2>
+          </div>
+          <div className="split">
+            <div className="split-text">
+              <h3 className="split-title">Machine Learning and Full Stack Developer</h3>
+              <p className="split-meta">AB Engineers, Mumbai. June to July 2025.</p>
+              <p className="split-copy">
+                I worked on both sides of an industrial monitoring system: the live application
+                and the model that predicts when equipment needs attention.
+              </p>
+              <ul className="bullets">
+                <li>Built a real-time monitoring dashboard with React, Tailwind CSS, Node.js, and InfluxDB.</li>
+                <li>Developed a Random Forest model for predictive maintenance.</li>
+                <li>Worked on deployment and optimization.</li>
+                <li>Helped improve monitoring efficiency and reduce operational downtime.</li>
+              </ul>
+              <div className="stats">
+                <div className="stat">
+                  <span className="stat-value">35%</span>
+                  <span className="stat-label">improvement in operational efficiency</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-value">90%</span>
+                  <span className="stat-label">model accuracy</span>
+                </div>
+              </div>
+              <p className="fine-print">
+                Both figures are averages measured over the three months after the system was built.
+              </p>
+            </div>
+            <BrowserFrame src={DashboardImg} alt="Monitoring dashboard preview" title="Monitoring dashboard" />
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="research" aria-labelledby="research-title">
+        <div className="page-shell">
+          <div className="section-head">
+            <h2 className="section-title" id="research-title">Looking closely at a changing city</h2>
+          </div>
+          <div className="split split-reverse">
+            <div className="split-text">
+              <p className="about-lede">Research taught me to sit with ambiguity before trying to solve it.</p>
+              <h3 className="paper-title">
+                Automated slum classification using deep convolutional neural networks and K-means clustering
+              </h3>
+              <p className="split-copy">
+                I worked on a way to identify informal settlements from high-resolution satellite
+                imagery across the Mumbai Metropolitan Region, classifying land-use patterns with
+                a pipeline of deep learning and GIS tools.
+              </p>
+              <ol className="pipeline" aria-label="Research pipeline">
+                <li>CNNs</li>
+                <li>K-means</li>
+                <li>GDAL</li>
+                <li>QGIS</li>
+              </ol>
+              <dl className="paper-meta">
+                <div>
+                  <dt>Presented at</dt>
+                  <dd>ICATES 2025, International Conference on Advancing Technology in Engineering and Science</dd>
+                </div>
+                <div>
+                  <dt>Published in</dt>
+                  <dd>IET Conference Proceedings, 2025</dd>
+                </div>
+                <div>
+                  <dt>DOI</dt>
+                  <dd>10.1049/icp.2025.4694</dd>
+                </div>
+              </dl>
+              <a className="button button-primary" href={DOI_URL} target="_blank" rel="noreferrer">
+                Read the paper <ArrowUpRight size={16} />
+              </a>
+            </div>
+            <BrowserFrame src={ResearchImg} alt="Research preview" bar={false} />
+          </div>
+        </div>
+      </section>
+
+      <section className="contact" id="contact" aria-labelledby="contact-title">
+        <div className="page-shell">
+          <h2 className="contact-title" id="contact-title">Have a problem worth untangling?</h2>
+          <p className="contact-copy">
+            If you&apos;re building something thoughtful, I&apos;d love to hear what you&apos;re working on.
+          </p>
+          <a className="contact-email" href={`mailto:${EMAIL}`}>
+            <span>{EMAIL}</span>
+            <ArrowUpRight size={26} />
+          </a>
+          <div className="contact-actions">
+            <a className="button button-light" href={RESUME_URL} target="_blank" rel="noreferrer">
+              <FileText size={16} /> View resume
+            </a>
+            <a className="button button-ghost" href={GITHUB_URL} target="_blank" rel="noreferrer">
+              <Github size={16} /> GitHub
+            </a>
+            <a className="button button-ghost" href={LINKEDIN_URL} target="_blank" rel="noreferrer">
+              <Linkedin size={16} /> LinkedIn
             </a>
           </div>
         </div>
@@ -528,37 +713,34 @@ function Home() {
 
       <footer className="site-footer">
         <div className="page-shell footer-inner">
-          <p className="footer-note">© Jia Harisinghani / built in Mumbai</p>
-          <div className="footer-links">
-            <a className="footer-link" href="https://github.com/Jia2005" target="_blank" rel="noreferrer" data-testid="link-footer-github"><Github size={13} /> GitHub</a>
-            <a className="footer-link" href="https://linkedin.com/in/jia-harisinghani" target="_blank" rel="noreferrer" data-testid="link-footer-linkedin"><Linkedin size={13} /> LinkedIn</a>
-            <button className="footer-link" type="button" onClick={() => setEggOpen(true)} data-testid="button-easter-egg"><Command size={13} /> Cmd J</button>
-          </div>
+          <p>&copy; {new Date().getFullYear()} Jia Harisinghani. Built in Mumbai.</p>
+          <button className="footer-shortcut" type="button" onClick={() => setEggOpen(true)}>
+            <kbd>{shortcut}</kbd> for a small surprise
+          </button>
         </div>
       </footer>
 
       {eggOpen && (
-        <aside className="easter-egg" aria-live="polite" data-testid="status-easter-egg">
+        <aside className="easter-egg" aria-live="polite">
           <div className="easter-egg-title">
-            <span><Terminal size={12} /> small system note</span>
-            <button className="easter-egg-close" type="button" onClick={() => setEggOpen(false)} aria-label="Close technical note" data-testid="button-close-easter-egg"><X size={14} /></button>
+            <span>
+              <Terminal size={13} /> Small system note
+            </span>
+            <button className="icon-button icon-button-dark" type="button" onClick={() => setEggOpen(false)} aria-label="Close note">
+              <X size={15} />
+            </button>
           </div>
-          <p>you found the shortcut. the best interfaces leave a little room for curiosity.</p>
-          <button className="button-quiet" type="button" onClick={copyEmail} data-testid="button-copy-email">
-            {copied ? <Check size={14} /> : <Code2 size={14} />}
+          <p>You found the shortcut. The best interfaces leave a little room for curiosity.</p>
+          <button className="button button-light button-sm" type="button" onClick={copyEmail}>
+            {copied ? <Check size={14} /> : <Copy size={14} />}
             {copied ? 'Email copied' : 'Copy email address'}
           </button>
         </aside>
       )}
-      {selectedProject && (
-        <ProjectCaseStudy project={selectedProject} onClose={() => setSelectedProject(null)} />
-      )}
+
+      {selectedProject && <CaseStudy project={selectedProject} onClose={() => setSelectedProject(null)} />}
     </main>
   );
 }
 
-function App() {
-  return <Home />;
-}
-
-export default App;
+export default Home;
