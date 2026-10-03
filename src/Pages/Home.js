@@ -475,9 +475,9 @@ function Home() {
         <div className="page-shell hero-grid">
           <div className="hero-text">
             <h1 className="hero-title" id="hero-title">
-              <span>I make</span>
-              <span>hard things</span>
-              <span>click.</span>
+              <span>I build</span>
+              <span>ideas into</span>
+              <span>reality.</span>
             </h1>
             <p className="hero-copy">
               Computer engineer in Mumbai building developer tools, visual learning products, and real-time
@@ -496,7 +496,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="section section-blue" id="about" aria-labelledby="about-title">
+      <section className="section" id="about" aria-labelledby="about-title">
         <div className="page-shell about-layout">
           <div className="about-photo">
             <img src={JiaImg} alt="Portrait of Jia Harisinghani" />
@@ -511,7 +511,7 @@ function Home() {
             </p>
             <ul className="chips chips-solid" aria-label="Background">
               <li>B.E. Computer Engineering</li>
-              <li>Thadomal Shahani Engineering College</li>
+              <li>University of Mumbai</li>
               <li>Exploring agentic AI</li>
             </ul>
             <dl className="skills">
