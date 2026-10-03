@@ -20,12 +20,12 @@ import SignoraImg from '../Images/Signora.png';
 import DashboardImg from '../Images/Dashboard.png';
 import ResearchImg from '../Images/Research.png';
 import JiaImg from '../Images/Jia.png';
+import ResumePdf from '../Pdf/Resume.pdf';
 
 const EMAIL = 'jia2.harisinghani@gmail.com';
 const GITHUB_URL = 'https://github.com/Jia2005';
 const LINKEDIN_URL = 'https://linkedin.com/in/jia-harisinghani';
 const DOI_URL = 'https://doi.org/10.1049/icp.2025.4694';
-const RESUME_URL = 'https://drive.google.com/file/d/1NMEvk1LYc53f-KPyrpeAJq56LocMaWR4/view?usp=drive_link';
 
 const navItems = [
   { id: 'about', label: 'About' },
@@ -130,7 +130,7 @@ function BrowserFrame({ src, alt, title, bar = true }) {
         </div>
       )}
       <div className="frame-screen">
-        <img src={src} alt={alt} loading="lazy" />
+        <img src={src} alt={alt} loading="lazy" decoding="async" />
       </div>
     </div>
   );
@@ -447,7 +447,7 @@ function Home() {
             {navItems.map((item) => navLink(item, 'nav-link'))}
           </nav>
           <div className="header-actions">
-            <a className="button button-secondary button-sm" href={RESUME_URL} target="_blank" rel="noreferrer">
+            <a className="button button-secondary button-sm" href={ResumePdf} target="_blank" rel="noreferrer">
               <FileText size={15} /> Resume
             </a>
           </div>
@@ -463,7 +463,7 @@ function Home() {
           {menuOpen && (
             <nav className="mobile-nav" aria-label="Mobile navigation">
               {navItems.map((item) => navLink(item, 'mobile-link'))}
-              <a className="mobile-link" href={RESUME_URL} target="_blank" rel="noreferrer">
+              <a className="mobile-link" href={ResumePdf} target="_blank" rel="noreferrer">
                 Resume
               </a>
             </nav>
@@ -474,9 +474,6 @@ function Home() {
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="page-shell hero-grid">
           <div className="hero-text">
-            <p className="hero-status">
-              <i className="status-dot" /> Open to new opportunities
-            </p>
             <h1 className="hero-title" id="hero-title">
               <span>I make</span>
               <span>hard things</span>
@@ -499,7 +496,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="section" id="about" aria-labelledby="about-title">
+      <section className="section section-blue" id="about" aria-labelledby="about-title">
         <div className="page-shell about-layout">
           <div className="about-photo">
             <img src={JiaImg} alt="Portrait of Jia Harisinghani" />
@@ -509,11 +506,12 @@ function Home() {
               Between building and explaining
             </h2>
             <p className="about-lede">
-              I like fuzzy requirements, weird edge cases, and the moment a system finally clicks.
+              Hi, I&apos;m Jia. I build tools that help people understand things, whether that&apos;s code, data
+              structures, or a live dashboard.
             </p>
             <ul className="chips chips-solid" aria-label="Background">
               <li>B.E. Computer Engineering</li>
-              <li>University of Mumbai</li>
+              <li>Thadomal Shahani Engineering College</li>
               <li>Exploring agentic AI</li>
             </ul>
             <dl className="skills">
@@ -611,7 +609,7 @@ function Home() {
             <ArrowUpRight size={26} />
           </a>
           <div className="contact-actions">
-            <a className="button button-sun" href={RESUME_URL} target="_blank" rel="noreferrer">
+            <a className="button button-sun" href={ResumePdf} target="_blank" rel="noreferrer">
               <FileText size={16} /> Resume
             </a>
             <a className="button button-ghost" href={GITHUB_URL} target="_blank" rel="noreferrer">
