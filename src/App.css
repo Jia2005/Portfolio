@@ -641,28 +641,6 @@ button {
   border-block: 2px solid var(--ink);
 }
 
-.section-blue {
-  background: var(--indigo);
-  color: #fff;
-  border-block: 2px solid var(--ink);
-}
-
-.section-blue :focus-visible {
-  outline-color: var(--sun);
-}
-
-.section-blue .skills {
-  border-top-color: #fff;
-}
-
-.section-blue .skill-row {
-  border-bottom-color: rgba(255, 255, 255, 0.28);
-}
-
-.section-blue .skill-row dt {
-  color: rgba(255, 255, 255, 0.82);
-}
-
 .section-head {
   display: flex;
   flex-direction: column;
