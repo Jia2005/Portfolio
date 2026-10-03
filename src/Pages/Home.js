@@ -85,7 +85,7 @@ const projects = [
     tint: 'var(--mint)',
     name: 'Sign-to-text',
     tagline: 'Listening with the eyes.',
-    blurb: 'Real-time sign recognition that turns live video into text.',
+    blurb: 'Real-time sign recognition that turns live video into text and helps users learn sign language.',
     tags: ['Computer vision', 'Real time', 'Accessibility'],
     imageSrc: SignoraImg,
     linkText: 'View code',
@@ -538,7 +538,7 @@ function Home() {
             <h2 className="section-title" id="work-title">
               Work
             </h2>
-            <p className="section-sub">Three projects about making hard things easier to see.</p>
+            <p className="section-sub">Projects built around making complex things easier to understand.</p>
           </div>
           <div className="projects">
             {projects.map((project) => (
